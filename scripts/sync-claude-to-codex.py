@@ -198,14 +198,14 @@ def generate_config_toml(settings: dict, shared_config_path: Path) -> str:
         lines.append("")
 
     features = shared_config.get("features", {})
-    codex_hooks = features.get("codex_hooks")
-    if codex_hooks is None and settings.get("hooks"):
-        codex_hooks = True
-    if codex_hooks is not None:
+    hooks = features.get("hooks", features.get("codex_hooks"))
+    if hooks is None and settings.get("hooks"):
+        hooks = True
+    if hooks is not None:
         lines.extend(
             [
                 "[features]",
-                f"codex_hooks = {'true' if codex_hooks else 'false'}",
+                f"hooks = {'true' if hooks else 'false'}",
                 "",
             ]
         )

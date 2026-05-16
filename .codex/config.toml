@@ -6,4 +6,4 @@ ask_for_approval = "never"
 sandbox = "danger-full-access"
 
 [features]
-codex_hooks = true
+hooks = true
