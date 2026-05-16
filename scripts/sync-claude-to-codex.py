@@ -346,11 +346,24 @@ def generate_rules(settings_local: dict, shared_rules_path: Path) -> str:
         ("tail",),
         ("wc",),
     }
+    auto_allow_command_prefixes = {
+        ("cargo",),
+        ("go",),
+        ("pnpm",),
+        ("python3",),
+    }
 
     for pattern in rules:
         rendered_pattern = ", ".join(shell_quote(token) for token in pattern)
         source = " ".join(pattern)
-        decision = "allow" if tuple(pattern) in auto_allow_patterns or pattern[:1] == ["gh"] else "prompt"
+        key = tuple(pattern)
+        decision = (
+            "allow"
+            if key in auto_allow_patterns
+            or pattern[:1] == ["gh"]
+            or any(key[: len(prefix)] == prefix for prefix in auto_allow_command_prefixes)
+            else "prompt"
+        )
         lines.extend(
             [
                 "prefix_rule(",
